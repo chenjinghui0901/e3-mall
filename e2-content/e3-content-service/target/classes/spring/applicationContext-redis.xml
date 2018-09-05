@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd
+	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.2.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.2.xsd
+	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.2.xsd">
+
+	<!-- redis连接池的配置 -->
+	<bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
+		<property name="maxIdle" value="1000" />
+		<property name="minIdle" value="100" />
+		<property name="testOnBorrow" value="true" />
+		<property name="testOnReturn" value="true" />
+	</bean>
+	<!-- redis的连接池pool，不是必选项：timeout/password -->
+	<bean id="jedisPool" class="redis.clients.jedis.JedisPool">
+		<constructor-arg index="0" ref="jedisPoolConfig"/>
+		<constructor-arg index="1" value="${redisPool.host}"/>
+		<constructor-arg index="2" value="${redisPool.port}" type="int"/>
+		<constructor-arg index="3" value="${redisPool.time}" type="int"/>
+		<constructor-arg index="4" value="${redisPool.password}"/>
+	</bean>
+	<bean id="jedisClientPool" class="com.jinghui.common.jedis.JedisClientPool">
+		<property name="jedisPool" ref="jedisPool" />
+	</bean>
+	
+	<!-- 连接redis集群 -->
+	<!-- <bean id="jedisClientCluster" class="com.jinghui.common.jedis.JedisClientCluster">
+		<property name="jedisCluster" ref="jedisCluster"></property>
+	</bean>
+	<bean id="jedisCluster" class="redis.clients.jedis.JedisCluster">
+		<constructor-arg name="nodes">
+			<set>
+				<bean class="redis.clients.jedis.HostAndPort">
+					<constructor-arg name="host" value="${redisCluster.host1}"/>
+					<constructor-arg name="port" value="${redisCluster.port1}"/>
+				</bean>
+				<bean class="redis.clients.jedis.HostAndPort">
+					<constructor-arg name="host" value="${redisCluster.host2}"/>
+					<constructor-arg name="port" value="${redisCluster.port2}"/>
+				</bean>
+				<bean class="redis.clients.jedis.HostAndPort">
+					<constructor-arg name="host" value="${redisCluster.host3}"/>
+					<constructor-arg name="port" value="${redisCluster.port3}"/>
+				</bean>
+				<bean class="redis.clients.jedis.HostAndPort">
+					<constructor-arg name="host" value="${redisCluster.host4}"/>
+					<constructor-arg name="port" value="${redisCluster.port4}"/>
+				</bean>
+				<bean class="redis.clients.jedis.HostAndPort">
+					<constructor-arg name="host" value="${redisCluster.host5}"/>
+					<constructor-arg name="port" value="${redisCluster.port5}"/>
+				</bean>
+				<bean class="redis.clients.jedis.HostAndPort">
+					<constructor-arg name="host" value="${redisCluster.host6}"/>
+					<constructor-arg name="port" value="${redisCluster.port6}"/>
+				</bean>
+			</set>
+		</constructor-arg>
+	</bean> -->
+	
+</beans>
